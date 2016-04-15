@@ -51,6 +51,29 @@ TEST(Coding, Fixed64) {
   }
 }
 
+// Test that encoding routines generate little-endian encodings
+TEST(Coding, EncodingOutput) {
+  std::string dst;
+  PutFixed32(&dst, 0x04030201);
+  ASSERT_EQ(4, dst.size());
+  ASSERT_EQ(0x01, static_cast<int>(dst[0]));
+  ASSERT_EQ(0x02, static_cast<int>(dst[1]));
+  ASSERT_EQ(0x03, static_cast<int>(dst[2]));
+  ASSERT_EQ(0x04, static_cast<int>(dst[3]));
+
+  dst.clear();
+  PutFixed64(&dst, 0x0807060504030201ull);
+  ASSERT_EQ(8, dst.size());
+  ASSERT_EQ(0x01, static_cast<int>(dst[0]));
+  ASSERT_EQ(0x02, static_cast<int>(dst[1]));
+  ASSERT_EQ(0x03, static_cast<int>(dst[2]));
+  ASSERT_EQ(0x04, static_cast<int>(dst[3]));
+  ASSERT_EQ(0x05, static_cast<int>(dst[4]));
+  ASSERT_EQ(0x06, static_cast<int>(dst[5]));
+  ASSERT_EQ(0x07, static_cast<int>(dst[6]));
+  ASSERT_EQ(0x08, static_cast<int>(dst[7]));
+}
+
 TEST(Coding, Varint32) {
   std::string s;
   for (uint32_t i = 0; i < (32 * 32); i++) {
@@ -86,16 +109,16 @@ TEST(Coding, Varint64) {
     values.push_back(power);
     values.push_back(power-1);
     values.push_back(power+1);
-  };
+  }
 
   std::string s;
-  for (int i = 0; i < values.size(); i++) {
+  for (size_t i = 0; i < values.size(); i++) {
     PutVarint64(&s, values[i]);
   }
 
   const char* p = s.data();
   const char* limit = p + s.size();
-  for (int i = 0; i < values.size(); i++) {
+  for (size_t i = 0; i < values.size(); i++) {
     ASSERT_TRUE(p < limit);
     uint64_t actual;
     const char* start = p;
@@ -120,7 +143,7 @@ TEST(Coding, Varint32Truncation) {
   std::string s;
   PutVarint32(&s, large_value);
   uint32_t result;
-  for (int len = 0; len < s.size() - 1; len++) {
+  for (size_t len = 0; len < s.size() - 1; len++) {
     ASSERT_TRUE(GetVarint32Ptr(s.data(), s.data() + len, &result) == NULL);
   }
   ASSERT_TRUE(GetVarint32Ptr(s.data(), s.data() + s.size(), &result) != NULL);
@@ -139,7 +162,7 @@ TEST(Coding, Varint64Truncation) {
   std::string s;
   PutVarint64(&s, large_value);
   uint64_t result;
-  for (int len = 0; len < s.size() - 1; len++) {
+  for (size_t len = 0; len < s.size() - 1; len++) {
     ASSERT_TRUE(GetVarint64Ptr(s.data(), s.data() + len, &result) == NULL);
   }
   ASSERT_TRUE(GetVarint64Ptr(s.data(), s.data() + s.size(), &result) != NULL);
@@ -166,7 +189,7 @@ TEST(Coding, Strings) {
   ASSERT_EQ("", input.ToString());
 }
 
-}
+}  // namespace leveldb
 
 int main(int argc, char** argv) {
   return leveldb::test::RunAllTests();
