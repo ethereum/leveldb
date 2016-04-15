@@ -9,39 +9,44 @@
 #include <vector>
 #include <algorithm>
 #include "leveldb/comparator.h"
+#include "table/format.h"
 #include "util/coding.h"
 #include "util/logging.h"
 
 namespace leveldb {
 
 inline uint32_t Block::NumRestarts() const {
-  assert(size_ >= 2*sizeof(uint32_t));
+  assert(size_ >= sizeof(uint32_t));
   return DecodeFixed32(data_ + size_ - sizeof(uint32_t));
 }
 
-Block::Block(const char* data, size_t size)
-    : data_(data),
-      size_(size) {
+Block::Block(const BlockContents& contents)
+    : data_(contents.data.data()),
+      size_(contents.data.size()),
+      owned_(contents.heap_allocated) {
   if (size_ < sizeof(uint32_t)) {
     size_ = 0;  // Error marker
   } else {
-    restart_offset_ = size_ - (1 + NumRestarts()) * sizeof(uint32_t);
-    if (restart_offset_ > size_ - sizeof(uint32_t)) {
-      // The size is too small for NumRestarts() and therefore
-      // restart_offset_ wrapped around.
+    size_t max_restarts_allowed = (size_-sizeof(uint32_t)) / sizeof(uint32_t);
+    if (NumRestarts() > max_restarts_allowed) {
+      // The size is too small for NumRestarts()
       size_ = 0;
+    } else {
+      restart_offset_ = size_ - (1 + NumRestarts()) * sizeof(uint32_t);
     }
   }
 }
 
 Block::~Block() {
-  delete[] data_;
+  if (owned_) {
+    delete[] data_;
+  }
 }
 
 // Helper routine: decode the next block entry starting at "p",
 // storing the number of shared key bytes, non_shared key bytes,
 // and the length of the value in "*shared", "*non_shared", and
-// "*value_length", respectively.  Will not derefence past "limit".
+// "*value_length", respectively.  Will not dereference past "limit".
 //
 // If any errors are detected, returns NULL.  Otherwise, returns a
 // pointer to the key delta (just past the three decoded values).
@@ -158,8 +163,8 @@ class Block::Iter : public Iterator {
   }
 
   virtual void Seek(const Slice& target) {
-    // Binary search in restart array to find the first restart point
-    // with a key >= target
+    // Binary search in restart array to find the last restart point
+    // with a key < target
     uint32_t left = 0;
     uint32_t right = num_restarts_ - 1;
     while (left < right) {
@@ -249,7 +254,7 @@ class Block::Iter : public Iterator {
 };
 
 Iterator* Block::NewIterator(const Comparator* cmp) {
-  if (size_ < 2*sizeof(uint32_t)) {
+  if (size_ < sizeof(uint32_t)) {
     return NewErrorIterator(Status::Corruption("bad block contents"));
   }
   const uint32_t num_restarts = NumRestarts();
@@ -260,4 +265,4 @@ Iterator* Block::NewIterator(const Comparator* cmp) {
   }
 }
 
-}
+}  // namespace leveldb
