@@ -1,3 +1,6 @@
+#ifndef STORAGE_LEVELDB_DB_SKIPLIST_H_
+#define STORAGE_LEVELDB_DB_SKIPLIST_H_
+
 // Copyright (c) 2011 The LevelDB Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
@@ -105,7 +108,8 @@ class SkipList {
   port::AtomicPointer max_height_;   // Height of the entire list
 
   inline int GetMaxHeight() const {
-    return reinterpret_cast<intptr_t>(max_height_.NoBarrier_Load());
+    return static_cast<int>(
+        reinterpret_cast<intptr_t>(max_height_.NoBarrier_Load()));
   }
 
   // Read/written only by Insert().
@@ -375,4 +379,6 @@ bool SkipList<Key,Comparator>::Contains(const Key& key) const {
   }
 }
 
-}
+}  // namespace leveldb
+
+#endif  // STORAGE_LEVELDB_DB_SKIPLIST_H_

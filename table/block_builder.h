@@ -21,7 +21,7 @@ class BlockBuilder {
   // Reset the contents as if the BlockBuilder was just constructed.
   void Reset();
 
-  // REQUIRES: Finish() has not been callled since the last call to Reset().
+  // REQUIRES: Finish() has not been called since the last call to Reset().
   // REQUIRES: key is larger than any previously added key
   void Add(const Slice& key, const Slice& value);
 
@@ -52,6 +52,6 @@ class BlockBuilder {
   void operator=(const BlockBuilder&);
 };
 
-}
+}  // namespace leveldb
 
 #endif  // STORAGE_LEVELDB_TABLE_BLOCK_BUILDER_H_

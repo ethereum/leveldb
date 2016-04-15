@@ -31,13 +31,17 @@
 #ifndef STORAGE_LEVELDB_PORT_PORT_WIN_H_
 #define STORAGE_LEVELDB_PORT_PORT_WIN_H_
 
+#ifdef _MSC_VER
 #define snprintf _snprintf
 #define close _close
 #define fread_unlocked _fread_nolock
+#endif
 
 #include <string>
-
 #include <stdint.h>
+#ifdef SNAPPY
+#include <snappy.h>
+#endif
 
 namespace leveldb {
 namespace port {
@@ -91,12 +95,34 @@ class CondVar {
   
 };
 
+class OnceType {
+public:
+//    OnceType() : init_(false) {}
+    OnceType(const OnceType &once) : init_(once.init_) {}
+    OnceType(bool f) : init_(f) {}
+    void InitOnce(void (*initializer)()) {
+        mutex_.Lock();
+        if (!init_) {
+            init_ = true;
+            initializer();
+        }
+        mutex_.Unlock();
+    }
+
+private:
+    bool init_;
+    Mutex mutex_;
+};
+
+#define LEVELDB_ONCE_INIT false
+extern void InitOnce(port::OnceType*, void (*initializer)());
+
 // Storage for a lock-free pointer
 class AtomicPointer {
  private:
   void * rep_;
  public:
-  AtomicPointer() : rep_(nullptr) { }
+  AtomicPointer() : rep_(NULL) { }
   explicit AtomicPointer(void* v); 
   void* Acquire_Load() const;
 

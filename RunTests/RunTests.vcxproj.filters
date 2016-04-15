@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\db">
+      <UniqueIdentifier>{f6239bb9-80fc-40a9-aefb-706aa966e2b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\util">
+      <UniqueIdentifier>{928fdc77-dac4-45a9-99a0-4118f2ab15c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\helpers">
+      <UniqueIdentifier>{6c23d653-9ec8-4f04-b290-3e8e72384d3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\table">
+      <UniqueIdentifier>{aa0a6920-57db-4ee6-beaf-29cbc68c05c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\issues">
+      <UniqueIdentifier>{c2d593bd-e344-43b4-81c7-6d526359fdf6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\leveldb-single-file.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RunTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\db\db_test.cc">
+      <Filter>Source Files\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\db\autocompact_test.cc">
+      <Filter>Source Files\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\db\corruption_test.cc">
+      <Filter>Source Files\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\db\dbformat_test.cc">
+      <Filter>Source Files\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\db\filename_test.cc">
+      <Filter>Source Files\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\db\log_test.cc">
+      <Filter>Source Files\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\db\skiplist_test.cc">
+      <Filter>Source Files\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\db\version_edit_test.cc">
+      <Filter>Source Files\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\db\version_set_test.cc">
+      <Filter>Source Files\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\db\write_batch_test.cc">
+      <Filter>Source Files\db</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\arena_test.cc">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\bloom_test.cc">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\cache_test.cc">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\coding_test.cc">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\crc32c_test.cc">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\util\env_test.cc">
+      <Filter>Source Files\util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\helpers\memenv\memenv_test.cc">
+      <Filter>Source Files\helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\table\filter_block_test.cc">
+      <Filter>Source Files\table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\table\table_test.cc">
+      <Filter>Source Files\table</Filter>
+    </ClCompile>
+    <ClCompile Include="..\issues\issue178_test.cc">
+      <Filter>Source Files\issues</Filter>
+    </ClCompile>
+    <ClCompile Include="..\issues\issue200_test.cc">
+      <Filter>Source Files\issues</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\crc32c.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\snappy-single-file.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
