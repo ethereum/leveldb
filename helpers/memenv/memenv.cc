@@ -55,14 +55,15 @@ class FileState {
     }
     const uint64_t available = size_ - offset;
     if (n > available) {
-      n = available;
+      n = static_cast<size_t>(available);
     }
     if (n == 0) {
       *result = Slice();
       return Status::OK();
     }
 
-    size_t block = offset / kBlockSize;
+    assert(offset / kBlockSize <= SIZE_MAX);
+    size_t block = static_cast<size_t>(offset / kBlockSize);
     size_t block_offset = offset % kBlockSize;
 
     if (n <= kBlockSize - block_offset) {
@@ -167,7 +168,7 @@ class SequentialFileImpl : public SequentialFile {
     if (pos_ > file_->Size()) {
       return Status::IOError("pos_ > file_->Size()");
     }
-    const size_t available = file_->Size() - pos_;
+    const uint64_t available = file_->Size() - pos_;
     if (n > available) {
       n = available;
     }
@@ -177,7 +178,7 @@ class SequentialFileImpl : public SequentialFile {
 
  private:
   FileState* file_;
-  size_t pos_;
+  uint64_t pos_;
 };
 
 class RandomAccessFileImpl : public RandomAccessFile {
@@ -219,6 +220,11 @@ class WritableFileImpl : public WritableFile {
 
  private:
   FileState* file_;
+};
+
+class NoOpLogger : public Logger {
+ public:
+  virtual void Logv(const char* format, va_list ap) { }
 };
 
 class InMemoryEnv : public EnvWrapper {
@@ -358,6 +364,11 @@ class InMemoryEnv : public EnvWrapper {
     return Status::OK();
   }
 
+  virtual Status NewLogger(const std::string& fname, Logger** result) {
+    *result = new NoOpLogger;
+    return Status::OK();
+  }
+
  private:
   // Map from filenames to FileState objects, representing a simple file system.
   typedef std::map<std::string, FileState*> FileSystem;
@@ -365,10 +376,10 @@ class InMemoryEnv : public EnvWrapper {
   FileSystem file_map_;  // Protected by mutex_.
 };
 
-}
+}  // namespace
 
 Env* NewMemEnv(Env* base_env) {
   return new InMemoryEnv(base_env);
 }
 
-}
+}  // namespace leveldb

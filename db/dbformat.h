@@ -2,12 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file. See the AUTHORS file for names of contributors.
 
-#ifndef STORAGE_LEVELDB_DB_FORMAT_H_
-#define STORAGE_LEVELDB_DB_FORMAT_H_
+#ifndef STORAGE_LEVELDB_DB_DBFORMAT_H_
+#define STORAGE_LEVELDB_DB_DBFORMAT_H_
 
 #include <stdio.h>
 #include "leveldb/comparator.h"
 #include "leveldb/db.h"
+#include "leveldb/filter_policy.h"
 #include "leveldb/slice.h"
 #include "leveldb/table_builder.h"
 #include "util/coding.h"
@@ -37,7 +38,10 @@ static const int kL0_StopWritesTrigger = 12;
 // space if the same key space is being repeatedly overwritten.
 static const int kMaxMemCompactLevel = 2;
 
-}
+// Approximate gap in bytes between samples of data read during iteration.
+static const int kReadBytesPeriod = 1048576;
+
+}  // namespace config
 
 class InternalKey;
 
@@ -121,6 +125,17 @@ class InternalKeyComparator : public Comparator {
   const Comparator* user_comparator() const { return user_comparator_; }
 
   int Compare(const InternalKey& a, const InternalKey& b) const;
+};
+
+// Filter policy wrapper that converts from internal keys to user keys
+class InternalFilterPolicy : public FilterPolicy {
+ private:
+  const FilterPolicy* const user_policy_;
+ public:
+  explicit InternalFilterPolicy(const FilterPolicy* p) : user_policy_(p) { }
+  virtual const char* Name() const;
+  virtual void CreateFilter(const Slice* keys, int n, std::string* dst) const;
+  virtual bool KeyMayMatch(const Slice& key, const Slice& filter) const;
 };
 
 // Modules in this directory should keep internal keys wrapped inside
@@ -210,6 +225,6 @@ inline LookupKey::~LookupKey() {
   if (start_ != space_) delete[] start_;
 }
 
-}
+}  // namespace leveldb
 
-#endif  // STORAGE_LEVELDB_DB_FORMAT_H_
+#endif  // STORAGE_LEVELDB_DB_DBFORMAT_H_
