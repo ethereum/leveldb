@@ -94,15 +94,15 @@ class Reader {
 
   // Reports dropped bytes to the reporter.
   // buffer_ must be updated to remove the dropped bytes prior to invocation.
-  void ReportCorruption(size_t bytes, const char* reason);
-  void ReportDrop(size_t bytes, const Status& reason);
+  void ReportCorruption(uint64_t bytes, const char* reason);
+  void ReportDrop(uint64_t bytes, const Status& reason);
 
   // No copying allowed
   Reader(const Reader&);
   void operator=(const Reader&);
 };
 
-}
-}
+}  // namespace log
+}  // namespace leveldb
 
 #endif  // STORAGE_LEVELDB_DB_LOG_READER_H_

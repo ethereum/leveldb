@@ -11,6 +11,10 @@
 
 namespace leveldb {
 
+// A utility routine: write "data" to the named file and Sync() it.
+extern Status WriteStringToFileSync(Env* env, const Slice& data,
+                                    const std::string& fname);
+
 static std::string MakeFileName(const std::string& name, uint64_t number,
                                 const char* suffix) {
   char buf[100];
@@ -26,6 +30,11 @@ std::string LogFileName(const std::string& name, uint64_t number) {
 }
 
 std::string TableFileName(const std::string& name, uint64_t number) {
+  assert(number > 0);
+  return MakeFileName(name, number, "ldb");
+}
+
+std::string SSTTableFileName(const std::string& name, uint64_t number) {
   assert(number > 0);
   return MakeFileName(name, number, "sst");
 }
@@ -67,7 +76,7 @@ std::string OldInfoLogFileName(const std::string& dbname) {
 //    dbname/LOG
 //    dbname/LOG.old
 //    dbname/MANIFEST-[0-9]+
-//    dbname/[0-9]+.(log|sst)
+//    dbname/[0-9]+.(log|sst|ldb)
 bool ParseFileName(const std::string& fname,
                    uint64_t* number,
                    FileType* type) {
@@ -102,7 +111,7 @@ bool ParseFileName(const std::string& fname,
     Slice suffix = rest;
     if (suffix == Slice(".log")) {
       *type = kLogFile;
-    } else if (suffix == Slice(".sst")) {
+    } else if (suffix == Slice(".sst") || suffix == Slice(".ldb")) {
       *type = kTableFile;
     } else if (suffix == Slice(".dbtmp")) {
       *type = kTempFile;
@@ -122,7 +131,7 @@ Status SetCurrentFile(Env* env, const std::string& dbname,
   assert(contents.starts_with(dbname + "/"));
   contents.remove_prefix(dbname.size() + 1);
   std::string tmp = TempFileName(dbname, descriptor_number);
-  Status s = WriteStringToFile(env, contents.ToString() + "\n", tmp);
+  Status s = WriteStringToFileSync(env, contents.ToString() + "\n", tmp);
   if (s.ok()) {
     s = env->RenameFile(tmp, CurrentFileName(dbname));
   }
@@ -132,4 +141,4 @@ Status SetCurrentFile(Env* env, const std::string& dbname,
   return s;
 }
 
-}
+}  // namespace leveldb

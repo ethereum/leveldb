@@ -24,7 +24,7 @@ extern std::string RandomKey(Random* rnd, int len);
 // "N*compressed_fraction" bytes and return a Slice that references
 // the generated data.
 extern Slice CompressibleString(Random* rnd, double compressed_fraction,
-                                int len, std::string* dst);
+                                size_t len, std::string* dst);
 
 // A wrapper that allows injection of errors.
 class ErrorEnv : public EnvWrapper {
@@ -47,7 +47,7 @@ class ErrorEnv : public EnvWrapper {
   }
 };
 
-}
-}
+}  // namespace test
+}  // namespace leveldb
 
 #endif  // STORAGE_LEVELDB_UTIL_TESTUTIL_H_

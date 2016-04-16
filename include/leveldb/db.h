@@ -12,8 +12,9 @@
 
 namespace leveldb {
 
+// Update Makefile if you change these
 static const int kMajorVersion = 1;
-static const int kMinorVersion = 2;
+static const int kMinorVersion = 18;
 
 struct Options;
 struct ReadOptions;
@@ -155,6 +156,6 @@ Status DestroyDB(const std::string& name, const Options& options);
 // on a database that contains important information.
 Status RepairDB(const std::string& dbname, const Options& options);
 
-}
+}  // namespace leveldb
 
 #endif  // STORAGE_LEVELDB_INCLUDE_DB_H_
