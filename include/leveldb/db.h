@@ -10,10 +10,16 @@
 #include "leveldb/iterator.h"
 #include "leveldb/options.h"
 
+#define LEVELDB_VERSION_MAJOR 1
+#define LEVELDB_VERSION_MINOR 16
+#define LEVELDB_VERSION_PATCH 0
+#define LEVELDB_VERSION_STRING "1.16.0.0"
+
 namespace leveldb {
 
-static const int kMajorVersion = 1;
-static const int kMinorVersion = 2;
+// Update Makefile if you change these
+static const int kMajorVersion = LEVELDB_VERSION_MAJOR;
+static const int kMinorVersion = LEVELDB_VERSION_MINOR;
 
 struct Options;
 struct ReadOptions;
@@ -155,6 +161,6 @@ Status DestroyDB(const std::string& name, const Options& options);
 // on a database that contains important information.
 Status RepairDB(const std::string& dbname, const Options& options);
 
-}
+}  // namespace leveldb
 
 #endif  // STORAGE_LEVELDB_INCLUDE_DB_H_

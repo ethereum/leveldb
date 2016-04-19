@@ -221,6 +221,11 @@ class WritableFileImpl : public WritableFile {
   FileState* file_;
 };
 
+class NoOpLogger : public Logger {
+ public:
+  virtual void Logv(const char* format, va_list ap) { }
+};
+
 class InMemoryEnv : public EnvWrapper {
  public:
   explicit InMemoryEnv(Env* base_env) : EnvWrapper(base_env) { }
@@ -358,6 +363,11 @@ class InMemoryEnv : public EnvWrapper {
     return Status::OK();
   }
 
+  virtual Status NewLogger(const std::string& fname, Logger** result) {
+    *result = new NoOpLogger;
+    return Status::OK();
+  }
+
  private:
   // Map from filenames to FileState objects, representing a simple file system.
   typedef std::map<std::string, FileState*> FileSystem;
@@ -365,10 +375,10 @@ class InMemoryEnv : public EnvWrapper {
   FileSystem file_map_;  // Protected by mutex_.
 };
 
-}
+}  // namespace
 
 Env* NewMemEnv(Env* base_env) {
   return new InMemoryEnv(base_env);
 }
 
-}
+}  // namespace leveldb

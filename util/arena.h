@@ -5,9 +5,9 @@
 #ifndef STORAGE_LEVELDB_UTIL_ARENA_H_
 #define STORAGE_LEVELDB_UTIL_ARENA_H_
 
-#include <cstddef>
 #include <vector>
 #include <assert.h>
+#include <stddef.h>
 #include <stdint.h>
 
 namespace leveldb {
@@ -63,6 +63,6 @@ inline char* Arena::Allocate(size_t bytes) {
   return AllocateFallback(bytes);
 }
 
-}
+}  // namespace leveldb
 
 #endif  // STORAGE_LEVELDB_UTIL_ARENA_H_

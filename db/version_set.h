@@ -21,6 +21,7 @@
 #include "db/dbformat.h"
 #include "db/version_edit.h"
 #include "port/port.h"
+#include "port/thread_annotations.h"
 
 namespace leveldb {
 
@@ -77,6 +78,12 @@ class Version {
   // REQUIRES: lock is held
   bool UpdateStats(const GetStats& stats);
 
+  // Record a sample of bytes read at the specified internal key.
+  // Samples are taken approximately once every config::kReadBytesPeriod
+  // bytes.  Returns true if a new compaction may need to be triggered.
+  // REQUIRES: lock is held
+  bool RecordReadSample(Slice key);
+
   // Reference count management (so Versions do not disappear out from
   // under live iterators)
   void Ref();
@@ -112,6 +119,15 @@ class Version {
 
   class LevelFileNumIterator;
   Iterator* NewConcatenatingIterator(const ReadOptions&, int level) const;
+
+  // Call func(arg, level, f) for every file that overlaps user_key in
+  // order from newest to oldest.  If an invocation of func returns
+  // false, makes no more calls.
+  //
+  // REQUIRES: user portion of internal_key == user_key.
+  void ForEachOverlapping(Slice user_key, Slice internal_key,
+                          void* arg,
+                          bool (*func)(void*, int, FileMetaData*));
 
   VersionSet* vset_;            // VersionSet to which this Version belongs
   Version* next_;               // Next version in linked list
@@ -159,7 +175,8 @@ class VersionSet {
   // current version.  Will release *mu while actually writing to the file.
   // REQUIRES: *mu is held on entry.
   // REQUIRES: no other thread concurrently calls LogAndApply()
-  Status LogAndApply(VersionEdit* edit, port::Mutex* mu);
+  Status LogAndApply(VersionEdit* edit, port::Mutex* mu)
+      EXCLUSIVE_LOCKS_REQUIRED(mu);
 
   // Recover the last saved descriptor from persistent storage.
   Status Recover();
@@ -172,6 +189,15 @@ class VersionSet {
 
   // Allocate and return a new file number
   uint64_t NewFileNumber() { return next_file_number_++; }
+
+  // Arrange to reuse "file_number" unless a newer file number has
+  // already been allocated.
+  // REQUIRES: "file_number" was returned by a call to NewFileNumber().
+  void ReuseFileNumber(uint64_t file_number) {
+    if (next_file_number_ == file_number + 1) {
+      next_file_number_ = file_number;
+    }
+  }
 
   // Return the number of Table files at the specified level.
   int NumLevelFiles(int level) const;
@@ -365,6 +391,6 @@ class Compaction {
   size_t level_ptrs_[config::kNumLevels];
 };
 
-}
+}  // namespace leveldb
 
 #endif  // STORAGE_LEVELDB_DB_VERSION_SET_H_

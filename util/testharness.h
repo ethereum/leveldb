@@ -113,26 +113,28 @@ class Tester {
 
 #define TCONCAT(a,b) TCONCAT1(a,b)
 #define TCONCAT1(a,b) a##b
+#define TCONCAT3(a,b,c) a##b##c
+#define TCONCAT4(a,b,c,d) a##b##c##d
 
 #define TEST(base,name)                                                 \
-class TCONCAT(_Test_,name) : public base {                              \
+class TCONCAT4(_Test_,base,_,name) : public base {                      \
  public:                                                                \
   void _Run();                                                          \
   static void _RunIt() {                                                \
-    TCONCAT(_Test_,name) t;                                             \
+    TCONCAT4(_Test_,base,_,name) t;                                     \
     t._Run();                                                           \
   }                                                                     \
 };                                                                      \
-bool TCONCAT(_Test_ignored_,name) =                                     \
-  ::leveldb::test::RegisterTest(#base, #name, &TCONCAT(_Test_,name)::_RunIt); \
-void TCONCAT(_Test_,name)::_Run()
+bool TCONCAT4(_Test_ignored_,base,_,name) =                             \
+  ::leveldb::test::RegisterTest(#base, #name, &TCONCAT4(_Test_,base,_,name)::_RunIt); \
+void TCONCAT4(_Test_,base,_,name)::_Run()
 
 // Register the specified test.  Typically not used directly, but
 // invoked via the macro expansion of TEST.
 extern bool RegisterTest(const char* base, const char* name, void (*func)());
 
 
-}
-}
+}  // namespace test
+}  // namespace leveldb
 
 #endif  // STORAGE_LEVELDB_UTIL_TESTHARNESS_H_

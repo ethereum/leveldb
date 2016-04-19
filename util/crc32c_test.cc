@@ -64,9 +64,11 @@ TEST(CRC, Mask) {
   ASSERT_EQ(crc, Unmask(Unmask(Mask(Mask(crc)))));
 }
 
-}
-}
+}  // namespace crc32c
+}  // namespace leveldb
 
+#ifndef LEVELDB_PLATFORM_WINDOWS
 int main(int argc, char** argv) {
   return leveldb::test::RunAllTests();
 }
+#endif

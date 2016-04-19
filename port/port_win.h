@@ -36,8 +36,13 @@
 #define fread_unlocked _fread_nolock
 
 #include <string>
-
 #include <stdint.h>
+#include <atomic>
+#ifdef LEVELDB_WITH_SNAPPY
+#include <snappy.h>
+#endif
+
+typedef ptrdiff_t ssize_t;
 
 namespace leveldb {
 namespace port {
@@ -91,25 +96,34 @@ class CondVar {
   
 };
 
+typedef void* OnceType;
+#define LEVELDB_ONCE_INIT 0
+extern void InitOnce(port::OnceType*, void (*initializer)());
+
 // Storage for a lock-free pointer
 class AtomicPointer {
  private:
-  void * rep_;
+  std::atomic<void *> rep_;
  public:
-  AtomicPointer() : rep_(nullptr) { }
-  explicit AtomicPointer(void* v); 
-  void* Acquire_Load() const;
-
-  void Release_Store(void* v);
-
-  void* NoBarrier_Load() const;
-
-  void NoBarrier_Store(void* v);
+  AtomicPointer() { }
+  explicit AtomicPointer(void* v) : rep_(v) { }
+  inline void* Acquire_Load() const {
+    return rep_.load(std::memory_order_acquire);
+  }
+  inline void Release_Store(void* v) {
+    rep_.store(v, std::memory_order_release);
+  }
+  inline void* NoBarrier_Load() const {
+    return rep_.load(std::memory_order_relaxed);
+  }
+  inline void NoBarrier_Store(void* v) {
+    rep_.store(v, std::memory_order_relaxed);
+  }
 };
 
 inline bool Snappy_Compress(const char* input, size_t length,
                             ::std::string* output) {
-#ifdef SNAPPY
+#ifdef LEVELDB_WITH_SNAPPY
   output->resize(snappy::MaxCompressedLength(length));
   size_t outlen;
   snappy::RawCompress(input, length, &(*output)[0], &outlen);
@@ -122,7 +136,7 @@ inline bool Snappy_Compress(const char* input, size_t length,
 
 inline bool Snappy_GetUncompressedLength(const char* input, size_t length,
                                          size_t* result) {
-#ifdef SNAPPY
+#ifdef LEVELDB_WITH_SNAPPY
   return snappy::GetUncompressedLength(input, length, result);
 #else
   return false;
@@ -131,7 +145,7 @@ inline bool Snappy_GetUncompressedLength(const char* input, size_t length,
 
 inline bool Snappy_Uncompress(const char* input, size_t length,
                               char* output) {
-#ifdef SNAPPY
+#ifdef LEVELDB_WITH_SNAPPY
   return snappy::RawUncompress(input, length, output);
 #else
   return false;
