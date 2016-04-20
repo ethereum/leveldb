@@ -67,6 +67,8 @@ TEST(CRC, Mask) {
 }  // namespace crc32c
 }  // namespace leveldb
 
+#ifndef LEVELDB_PLATFORM_WINDOWS
 int main(int argc, char** argv) {
   return leveldb::test::RunAllTests();
 }
+#endif

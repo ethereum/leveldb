@@ -10,11 +10,16 @@
 #include "leveldb/iterator.h"
 #include "leveldb/options.h"
 
+#define LEVELDB_VERSION_MAJOR 1
+#define LEVELDB_VERSION_MINOR 18
+#define LEVELDB_VERSION_PATCH 0
+#define LEVELDB_VERSION_STRING "1.18.0.0"
+
 namespace leveldb {
 
 // Update Makefile if you change these
-static const int kMajorVersion = 1;
-static const int kMinorVersion = 18;
+static const int kMajorVersion = LEVELDB_VERSION_MAJOR;
+static const int kMinorVersion = LEVELDB_VERSION_MINOR;
 
 struct Options;
 struct ReadOptions;

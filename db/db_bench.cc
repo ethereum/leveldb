@@ -922,6 +922,7 @@ class Benchmark {
 
 }  // namespace leveldb
 
+#ifndef LEVELDB_PLATFORM_WINDOWS
 int main(int argc, char** argv) {
   FLAGS_write_buffer_size = leveldb::Options().write_buffer_size;
   FLAGS_open_files = leveldb::Options().max_open_files;
@@ -976,3 +977,4 @@ int main(int argc, char** argv) {
   benchmark.Run();
   return 0;
 }
+#endif

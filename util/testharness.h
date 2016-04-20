@@ -53,8 +53,8 @@ class Tester {
 
   ~Tester() {
     if (!ok_) {
-      fprintf(stderr, "%s:%d:%s\n", fname_, line_, ss_.str().c_str());
-      exit(1);
+      fprintf(stderr, "ERROR: %s:%d:%s\n", fname_, line_, ss_.str().c_str());
+      //exit(1);
     }
   }
 
@@ -113,19 +113,21 @@ class Tester {
 
 #define TCONCAT(a,b) TCONCAT1(a,b)
 #define TCONCAT1(a,b) a##b
+#define TCONCAT3(a,b,c) a##b##c
+#define TCONCAT4(a,b,c,d) a##b##c##d
 
 #define TEST(base,name)                                                 \
-class TCONCAT(_Test_,name) : public base {                              \
+class TCONCAT4(_Test_,base,_,name) : public base {                      \
  public:                                                                \
   void _Run();                                                          \
   static void _RunIt() {                                                \
-    TCONCAT(_Test_,name) t;                                             \
+    TCONCAT4(_Test_,base,_,name) t;                                     \
     t._Run();                                                           \
   }                                                                     \
 };                                                                      \
-bool TCONCAT(_Test_ignored_,name) =                                     \
-  ::leveldb::test::RegisterTest(#base, #name, &TCONCAT(_Test_,name)::_RunIt); \
-void TCONCAT(_Test_,name)::_Run()
+bool TCONCAT4(_Test_ignored_,base,_,name) =                             \
+  ::leveldb::test::RegisterTest(#base, #name, &TCONCAT4(_Test_,base,_,name)::_RunIt); \
+void TCONCAT4(_Test_,base,_,name)::_Run()
 
 // Register the specified test.  Typically not used directly, but
 // invoked via the macro expansion of TEST.
