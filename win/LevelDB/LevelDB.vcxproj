@@ -209,7 +209,7 @@
     <ClCompile Include="..\..\util\cache.cc" />
     <ClCompile Include="..\..\util\coding.cc" />
     <ClCompile Include="..\..\util\comparator.cc" />
-    <ClCompile Include="..\..\util\crc32c.cc" />
+    <ClCompile Include="..\..\util\crc32c_win.cc" />
     <ClCompile Include="..\..\util\env.cc" />
     <ClCompile Include="..\..\util\env_win.cc" />
     <ClCompile Include="..\..\util\filter_policy.cc" />
