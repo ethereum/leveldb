@@ -30,7 +30,7 @@ class BytewiseComparatorImpl : public Comparator {
       std::string* start,
       const Slice& limit) const {
     // Find length of common prefix
-    size_t min_length = std::min(start->size(), limit.size());
+    size_t min_length = std::min<size_t>(start->size(), limit.size());
     size_t diff_index = 0;
     while ((diff_index < min_length) &&
            ((*start)[diff_index] == limit[diff_index])) {

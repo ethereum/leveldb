@@ -13,7 +13,7 @@
 #include "util/logging.h"
 #include "util/mutexlock.h"
 #include "util/random.h"
-
+#define ssize_t long int
 namespace leveldb {
 
 #if 0

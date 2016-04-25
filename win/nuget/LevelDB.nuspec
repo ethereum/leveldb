@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>LevelDB</id>
+    <title>LevelDB for C++</title>
+    <version>1.16.0.5</version>
+    <authors>Robert Važan</authors>
+    <owners>Robert Važan</owners>
+    <licenseUrl>http://leveldb.angeloflogic.com/license/</licenseUrl>
+    <projectUrl>http://leveldb.angeloflogic.com/</projectUrl>
+    <iconUrl>http://leveldb.angeloflogic.com/images/nuget-icon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>LevelDB is an embedded key-value database with fast random writes and fast reads of key ranges. This is a source code package that embeds LevelDB into your project.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright (C) 2011-2014 Robert Vazan &amp; upstream LevelDB developers</copyright>
+    <tags>leveldb, nosql, database, data, fast, native</tags>
+    <dependencies>
+      <dependency id="Crc32C" version="1.0.4" />
+      <dependency id="Snappy" version="1.1.1.7" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\include\**\*.h" target="\lib\native\include\" />
+    <file src="..\db\**\*.h" target="\lib\native\src\db\" />
+    <file src="..\db\**\*.cc" target="\lib\native\src\db\" exclude="**\*_test.cc" />
+    <file src="..\helpers\**\*.h" target="\lib\native\src\helpers\" />
+    <file src="..\helpers\**\*.cc" target="\lib\native\src\helpers\" exclude="**\*_test.cc" />
+    <file src="..\port\**\*.h" target="\lib\native\src\port\" />
+    <file src="..\port\**\*.cc" target="\lib\native\src\port\" exclude="**\*_test.cc" />
+    <file src="..\table\**\*.h" target="\lib\native\src\table\" />
+    <file src="..\table\**\*.cc" target="\lib\native\src\table\" exclude="**\*_test.cc" />
+    <file src="..\util\**\*.h" target="\lib\native\src\util\" />
+    <file src="..\util\**\*.cc" target="\lib\native\src\util\" exclude="**\*_test.cc" />
+    <file src="..\leveldb-single-file.cpp" target="\lib\native\src\leveldb-single-file.cpp" />
+    <file src="LevelDB.props" target="\build\native\LevelDB.props" />
+  </files>
+</package>
