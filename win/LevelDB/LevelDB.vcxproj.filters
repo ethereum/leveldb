@@ -174,12 +174,6 @@
     <ClCompile Include="..\..\db\write_batch.cc">
       <Filter>Source Files\db</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\lib\native\src\snappy-single-file.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\packages\Crc32C.1.0.4\lib\native\src\crc32c.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\util\crc32c_win.cc">
       <Filter>Source Files\port</Filter>
     </ClCompile>
