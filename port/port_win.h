@@ -31,7 +31,6 @@
 #ifndef STORAGE_LEVELDB_PORT_PORT_WIN_H_
 #define STORAGE_LEVELDB_PORT_PORT_WIN_H_
 
-#define snprintf _snprintf
 #define close _close
 #define fread_unlocked _fread_nolock
 
