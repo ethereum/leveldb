@@ -1,14 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LevelDB", "LevelDB\LevelDB.vcxproj", "{5B593D71-934A-4D5C-9581-1F89BB839E48}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Benchmark", "Benchmark\Benchmark.vcxproj", "{BD8D65E7-9D22-48BE-A446-B5EF79C27364}"
-	ProjectSection(ProjectDependencies) = postProject
-		{5B593D71-934A-4D5C-9581-1F89BB839E48} = {5B593D71-934A-4D5C-9581-1F89BB839E48}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RunTests", "RunTests\RunTests.vcxproj", "{805EF4EC-9054-42C0-95D5-63DDE5CCA875}"
 EndProject
@@ -30,14 +25,6 @@ Global
 		{5B593D71-934A-4D5C-9581-1F89BB839E48}.Release|Win32.Build.0 = Release|Win32
 		{5B593D71-934A-4D5C-9581-1F89BB839E48}.Release|x64.ActiveCfg = Release|x64
 		{5B593D71-934A-4D5C-9581-1F89BB839E48}.Release|x64.Build.0 = Release|x64
-		{BD8D65E7-9D22-48BE-A446-B5EF79C27364}.Debug|Win32.ActiveCfg = Debug|Win32
-		{BD8D65E7-9D22-48BE-A446-B5EF79C27364}.Debug|Win32.Build.0 = Debug|Win32
-		{BD8D65E7-9D22-48BE-A446-B5EF79C27364}.Debug|x64.ActiveCfg = Debug|x64
-		{BD8D65E7-9D22-48BE-A446-B5EF79C27364}.Debug|x64.Build.0 = Debug|x64
-		{BD8D65E7-9D22-48BE-A446-B5EF79C27364}.Release|Win32.ActiveCfg = Release|Win32
-		{BD8D65E7-9D22-48BE-A446-B5EF79C27364}.Release|Win32.Build.0 = Release|Win32
-		{BD8D65E7-9D22-48BE-A446-B5EF79C27364}.Release|x64.ActiveCfg = Release|x64
-		{BD8D65E7-9D22-48BE-A446-B5EF79C27364}.Release|x64.Build.0 = Release|x64
 		{805EF4EC-9054-42C0-95D5-63DDE5CCA875}.Debug|Win32.ActiveCfg = Debug|Win32
 		{805EF4EC-9054-42C0-95D5-63DDE5CCA875}.Debug|Win32.Build.0 = Debug|Win32
 		{805EF4EC-9054-42C0-95D5-63DDE5CCA875}.Debug|x64.ActiveCfg = Debug|x64
